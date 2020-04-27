@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Apr 23 19:10:24 2020
+
+@author: rekib
+"""
+
+#Loading the data set
+import pandas as pd
+import numpy as np
+import sklearn
+from sklearn import linear_model
+from sklearn.utils import shuffle
+import matplotlib.pyplot as plot
+import pickle
+
+data = pd.read_csv('student-mat.csv', sep=";")
+
+#Selecting few attributes
+data = data[['G1','G2','G3','studytime','failures','absences']]
+predict = "G3"
+
+X = np.array(data.drop([predict], 1))
+y = np.array(data[predict])
+
+X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, test_size=0.10, random_state=42)
+
+"""
+best = 0
+for _ in range(3000):
+    # Splitting the data into train and test samples
+    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, test_size=0.10)
+    
+    # Fitting the model
+    linear = linear_model.LinearRegression()
+    linear.fit(X_train, y_train)
+    acc = linear.score(X_test, y_test)
+    print(acc)
+    
+    if acc > best:
+        best = acc
+        # Saving the model
+        with open("studentmodel.pickle", "wb") as f:
+            pickle.dump(linear, f)
+
+print(best)
+"""
+
+#Loading the model
+pickle_in = open("studentmodel.pickle", "rb")
+linear = pickle.load(pickle_in)
+   
+
+#Predicting
+predictions = linear.predict(X_test)
+print("Data\t\t\t\t\tTarget\t\tPrediction")
+for i in range(len(predictions)):
+    print("{}\t\t\t{}\t\t{}".format(X_test[i], y_test[i], predictions[i])) 
+
+    
+#Plotting 
+p =''
+plot.scatter(data[p], data["G3"])
+plot.xlabel(p)
+plot.ylabel("Final Grade")
+plot.show()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
